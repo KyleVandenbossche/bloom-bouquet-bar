@@ -1,15 +1,16 @@
 // src/Components/Footer.js
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
     <footer style={styles.footer}>
       {/* Nav links */}
       <nav style={styles.navRow}>
-        <a href="/" style={styles.navLink}>Home</a>
-        <a href="/gallery" style={styles.navLink}>Gallery</a>
-        <a href="/services" style={styles.navLink}>Services</a>
-        <a href="/contact" style={styles.navLink}>Contact</a>
+        <Link to="/" style={styles.navLink}>Home</Link>
+        <Link to="/gallery" style={styles.navLink}>Gallery</Link>
+        <Link to="/services" style={styles.navLink}>Services</Link>
+        <Link to="/contact" style={styles.navLink}>Contact</Link>
       </nav>
 
       {/* Social icons */}
@@ -41,8 +42,6 @@ const Footer = () => {
             />
           </svg>
         </a>
-
-
       </div>
 
       {/* Copyright */}
@@ -55,7 +54,7 @@ const Footer = () => {
 
 const styles = {
   footer: {
-    background: "rgba(255, 255, 255, 0.9)", // ✅ Light white overlay to make text readable
+    background: "rgba(255, 255, 255, 0.9)",
     padding: "28px 12px",
     fontFamily: "Montserrat, sans-serif",
     textAlign: "center",
@@ -63,7 +62,7 @@ const styles = {
     flexShrink: 0,
     zIndex: 2,
     position: "relative",
-    boxShadow: "0 -2px 8px rgba(0,0,0,0.05)", // subtle top shadow
+    boxShadow: "0 -2px 8px rgba(0,0,0,0.05)",
   },
   navRow: {
     display: "flex",
