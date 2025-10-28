@@ -171,11 +171,8 @@ const Header = () => {
                   <a href="https://www.instagram.com/bloom.bouquet.bar/" target="_blank" rel="noreferrer" aria-label="Instagram">
                     <i className="fab fa-instagram instagram"></i>
                   </a>
-                  <a href="https://www.facebook.com/channydean" target="_blank" rel="noreferrer" aria-label="Facebook">
+                  <a href="https://www.facebook.com/share/1F3LrwNB6v/?mibextid=wwXIfr" target="_blank" rel="noreferrer" aria-label="Facebook">
                     <i className="fab fa-facebook-f facebook"></i>
-                  </a>
-                  <a href="https://www.linkedin.com/in/chandra-dean-76099465/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
-                    <i className="fab fa-linkedin-in linkedin"></i>
                   </a>
                 </div>
 

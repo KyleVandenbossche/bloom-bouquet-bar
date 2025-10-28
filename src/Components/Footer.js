@@ -42,19 +42,7 @@ const Footer = () => {
           </svg>
         </a>
 
-        <a
-          href="https://www.linkedin.com/in/chandra-dean-76099465/"
-          target="_blank"
-          rel="noreferrer"
-          style={styles.iconLink}
-        >
-          <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
-            <path
-              fill="#F7B27A"
-              d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM.25 8h4.5v13.75h-4.5V8zM8.75 8h4.3v1.86h.06c.6-1.14 2.07-2.34 4.27-2.34 4.56 0 5.4 3 5.4 6.92v7.31h-4.5v-6.48c0-1.55-.03-3.55-2.17-3.55-2.17 0-2.5 1.7-2.5 3.44v6.59h-4.5V8z"
-            />
-          </svg>
-        </a>
+
       </div>
 
       {/* Copyright */}
