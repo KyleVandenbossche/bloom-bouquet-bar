@@ -1,6 +1,7 @@
 // src/Components/Home.js
 import React from "react";
 import { Link } from "react-router-dom";
+import michiganMap from "../Photos/mitten-flower.png";
 
 export default function Home() {
   const styles = {
@@ -23,8 +24,7 @@ export default function Home() {
     },
     title: {
       margin: 0,
-      fontFamily:
-        "Montserrat, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif",
+      fontFamily: "Montserrat, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif",
       fontWeight: 700,
       fontSize: "36px",
       letterSpacing: 0.3,
@@ -40,38 +40,79 @@ export default function Home() {
       maxWidth: 760,
       background: "rgba(255,255,255,0.78)",
       backdropFilter: "blur(2px)",
-      padding: "22px 18px",
+      padding: "28px 28px",
       borderRadius: "10px",
       boxShadow: "0 6px 18px rgba(0,0,0,0.06)",
     },
     copy: {
       fontSize: 16,
-      color: "#222",
-      lineHeight: 1.6,
+      color: "#333",
+      lineHeight: 1.8,
       margin: 0,
     },
-    list: {
-      textAlign: "left",
-      margin: "14px auto",
-      padding: "0 0 0 18px",
-      maxWidth: 640,
-      lineHeight: 1.6,
+    divider: {
+      border: "none",
+      borderTop: "1px solid #f0d6e0",
+      margin: "20px 0",
+    },
+    offeringsGrid: {
+      display: "grid",
+      gridTemplateColumns: "repeat(3, 1fr)",
+      gap: "14px",
+      margin: "0 0 4px",
+      textAlign: "center",
+    },
+    offeringCard: {
+      background: "rgba(249,236,241,0.6)",
+      borderRadius: "10px",
+      padding: "14px 10px",
+    },
+    offeringEmoji: {
+      fontSize: 22,
+      marginBottom: 6,
+    },
+    offeringTitle: {
+      fontSize: 13,
+      fontWeight: 700,
+      color: "#c0607a",
+      margin: "0 0 4px",
+      fontFamily: "Montserrat, sans-serif",
+      letterSpacing: 0.3,
+    },
+    offeringDesc: {
+      fontSize: 12,
+      color: "#555",
+      lineHeight: 1.5,
+      margin: 0,
     },
     copySmall: {
-      marginTop: 8,
-      color: "#444",
+      marginTop: 4,
+      color: "#666",
+      fontSize: 13,
+      fontStyle: "italic",
+    },
+    bottomRow: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      marginTop: 16,
+      gap: 40,
+    },
+    mapImg: {
+      width: 140,
+      opacity: 0.92,
+      flexShrink: 0,
     },
     buttonWrap: {
-      marginTop: 20,
-      textAlign: "center",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
     },
   };
 
   const css = `
-    /* Design tokens scoped to this component */
     .page { --bb-pink:#E9B8C9; --bb-pink-d:#D99AB2; }
 
-    /* CTA button */
     .contactBtn {
       display:inline-block;
       padding:12px 28px;
@@ -99,16 +140,35 @@ export default function Home() {
       outline-offset:2px;
     }
 
-    /* Motion preference */
     @media (prefers-reduced-motion: reduce) {
       .contactBtn { transition:none; }
       .contactBtn:hover, .contactBtn:active { transform:none; }
     }
 
-    /* Responsive padding for the page wrapper */
-    @media (max-width:560px){ .page{ padding-left:20px; padding-right:20px; } }
+    @media (max-width: 560px) {
+      .page { padding-left:20px; padding-right:20px; }
+      .offerings-grid { grid-template-columns: 1fr !important; }
+    }
     @media (max-width:390px){ .page{ padding-left:24px; padding-right:24px; } }
   `;
+
+  const offerings = [
+    {
+      emoji: "💐",
+      title: "Bouquet Bars",
+      desc: "Guests hand-pick stems and build their own bouquet — perfect for weddings & showers.",
+    },
+    {
+      emoji: "✨",
+      title: "Pop-Up Experiences",
+      desc: "Eye-catching floral stations for brand activations, markets, and corporate events.",
+    },
+    {
+      emoji: "🌸",
+      title: "Custom Installations",
+      desc: "Lush, photo-worthy floral backdrops and displays designed around your vision.",
+    },
+  ];
 
   return (
     <section style={styles.section} id="home">
@@ -116,26 +176,41 @@ export default function Home() {
       <div style={styles.content} className="page">
         <h1 style={styles.title}>Bloom Bouquet Bar</h1>
         <p style={styles.tagline}>
-          Custom floral experiences for events, brands, and moments that matter.
+          A rental bouquet bar for any event — weddings, showers, pop-ups & more.
         </p>
 
         <div style={styles.copyWrap}>
           <p style={styles.copy}>
-            Bloom Bouquet Bar creates immersive, photo-worthy floral installations and bouquet stations for
-            weddings, corporate activations, and social events. From modern, minimal palettes to lush,
-            editorial blooms, we design interactive moments your guests won’t forget.
+            We bring an interactive floral experience right to your event. Guests choose their
+            favorite stems and wrap their own take-home bouquet — no floral experience needed,
+            just good vibes and beautiful blooms.
           </p>
 
-          <ul style={styles.list}>
-            <li>On-site bouquet bars and pop-up experiences</li>
-            <li>Custom installations & brand activations</li>
-            <li>Full-service design, setup, and teardown</li>
-          </ul>
+          <hr style={styles.divider} />
 
-          <p style={styles.copySmall}>Based in Metro Detroit • Available for travel</p>
+          <div style={styles.offeringsGrid} className="offerings-grid">
+            {offerings.map((o) => (
+              <div key={o.title} style={styles.offeringCard}>
+                <div style={styles.offeringEmoji}>{o.emoji}</div>
+                <p style={styles.offeringTitle}>{o.title}</p>
+                <p style={styles.offeringDesc}>{o.desc}</p>
+              </div>
+            ))}
+          </div>
 
-          <div style={styles.buttonWrap}>
-            <Link to="/contact" className="contactBtn">Get in Touch</Link>
+          <hr style={styles.divider} />
+
+          <p style={styles.copySmall}>Based in Metro Detroit • Available for travel • DM us to book!</p>
+
+          <div style={styles.bottomRow} className="bottom-row">
+            <img
+              src={michiganMap}
+              alt="Michigan — Metro Detroit"
+              style={styles.mapImg}
+            />
+            <div style={styles.buttonWrap} className="btn-wrap">
+              <Link to="/contact" className="contactBtn">Get in Touch</Link>
+            </div>
           </div>
         </div>
       </div>

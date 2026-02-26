@@ -1,7 +1,6 @@
 // src/Components/Gallery.js
 import React, { useEffect, useRef, useState } from "react";
 
-// 9 photos
 import bloomOne from "../Photos/bloom-1.PNG";
 import bloomTwo from "../Photos/bloom-2.PNG";
 import bloomThree from "../Photos/bloom-3.PNG";
@@ -24,12 +23,11 @@ const photos = [
   bloomNine,
 ];
 
-/** Single square tile with cursor-follow hover **/
 const FollowCard = ({ src, onOpen }) => {
   const imgRef = useRef(null);
   const wrapRef = useRef(null);
-  const FOLLOW = 6;         // px drift toward cursor
-  const HOVER_SCALE = 1.03; // gentle scale on hover
+  const FOLLOW = 6;
+  const HOVER_SCALE = 1.03;
 
   const onMove = (e) => {
     if (!wrapRef.current || !imgRef.current) return;
@@ -73,14 +71,12 @@ export default function Gallery() {
   const [lightboxSrc, setLightboxSrc] = useState(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
-  // ESC closes lightbox
   useEffect(() => {
     const onKey = (e) => e.key === "Escape" && setLightboxSrc(null);
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // trigger fade/scale animation
   useEffect(() => {
     if (lightboxSrc) {
       const id = requestAnimationFrame(() => setLightboxOpen(true));
@@ -107,7 +103,6 @@ export default function Gallery() {
         </div>
       </div>
 
-      {/* Lightbox */}
       {lightboxSrc && (
         <div
           className={`lightbox ${lightboxOpen ? "open" : ""}`}
@@ -135,11 +130,11 @@ export default function Gallery() {
 
 const styles = {
   wrap: {
-    background: "transparent", // no background image here
+    background: "transparent",
   },
   container: {
     width: "100%",
-    maxWidth: 940,
+    maxWidth: 780,
     padding: "48px 16px 72px",
     margin: "0 auto",
     textAlign: "center",
@@ -158,7 +153,7 @@ const styles = {
   },
   grid: {
     display: "grid",
-    gap: 6,           // tight IG-like gap
+    gap: 15,
     marginTop: 24,
   },
   tile: {
@@ -166,7 +161,7 @@ const styles = {
     padding: 0,
     margin: 0,
     width: "100%",
-    aspectRatio: "1 / 1", // squares
+    aspectRatio: "1 / 1",
     overflow: "hidden",
     background: "transparent",
     border: "none",
@@ -184,9 +179,9 @@ const styles = {
     WebkitUserDrag: "none",
     opacity: 0.9,
     transition: "opacity 200ms ease, transform 200ms ease",
+    imageRendering: "auto",
+    WebkitFontSmoothing: "auto",
   },
-
-  // Lightbox
   lightbox: {
     position: "fixed",
     inset: 0,
@@ -221,7 +216,6 @@ const styles = {
 };
 
 const css = `
-  /* 3 columns on desktop, 2 on tablet, 1 on phones */
   .grid-ig {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -236,7 +230,6 @@ const css = `
     .page { padding-left: 24px; padding-right: 24px; }
   }
 
-  /* Lightbox fade & scale */
   .lightbox.open {
     opacity: 1;
     background: rgba(0,0,0,0.85);
