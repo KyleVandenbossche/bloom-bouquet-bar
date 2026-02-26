@@ -1,29 +1,84 @@
 // src/Components/Contact.js
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 
 export default function Contact() {
-  const [status, setStatus] = useState(null); // "ok" | "error" | null
+  // status: "idle" | "sending" | "ok" | "error"
+  const [status, setStatus] = useState("idle");
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const onSubmit = (e) => {
+  const isSending = status === "sending";
+
+  const onSubmit = async (e) => {
     e.preventDefault();
+    setErrorMsg("");
+    setStatus("idle");
 
-    // Very simple client validation example:
     const form = e.currentTarget;
     const data = new FormData(form);
-    const name = data.get("name")?.toString().trim();
-    const email = data.get("email")?.toString().trim();
-    const message = data.get("message")?.toString().trim();
+
+    // Required fields
+    const name = (data.get("name") || "").toString().trim();
+    const email = (data.get("email") || "").toString().trim();
+    const message = (data.get("message") || "").toString().trim();
 
     if (!name || !email || !message) {
+      setErrorMsg("Please fill out name, email, and message.");
       setStatus("error");
       return;
     }
 
-    // TODO: wire this up to your backend / Email provider.
-    // For now, just show a success state and reset:
-    setStatus("ok");
-    form.reset();
+    // Convert FormData -> plain object (includes optional fields)
+    const payload = Object.fromEntries(data.entries());
+
+    try {
+      setStatus("sending");
+
+      const res = await fetch("/.netlify/functions/sendLead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      // Try to read response body for better errors
+      let bodyText = "";
+      try {
+        bodyText = await res.text();
+      } catch (_) {}
+
+      if (!res.ok) {
+        setErrorMsg(
+          bodyText?.trim()
+            ? `Submission failed: ${bodyText}`
+            : "Submission failed. Please try again."
+        );
+        setStatus("error");
+        return;
+      }
+
+      setStatus("ok");
+      form.reset();
+    } catch (err) {
+      setErrorMsg("Network error. Please try again.");
+      setStatus("error");
+    }
   };
+
+  const css = useMemo(
+    () => `
+      @media (max-width: 560px) {
+        .page { padding-left: 20px; padding-right: 20px; }
+      }
+      @media (max-width: 390px) {
+        .page { padding-left: 24px; padding-right: 24px; }
+      }
+
+      /* stack date/type on narrow screens */
+      @media (max-width: 720px) {
+        .grid2 { grid-template-columns: 1fr !important; }
+      }
+    `,
+    []
+  );
 
   return (
     <section style={styles.section} id="contact">
@@ -31,14 +86,14 @@ export default function Contact() {
 
       <div style={styles.wrap} className="page">
         <h1 style={styles.title}>Send a Petalgram</h1>
-        <p style={styles.tagline}>
-          Tell us about your event—let’s make it bloom.
-        </p>
+        <p style={styles.tagline}>Tell us about your event—let’s make it bloom.</p>
 
         <form style={styles.form} onSubmit={onSubmit} noValidate>
           {/* Name */}
           <div style={styles.row}>
-            <label htmlFor="name" style={styles.label}>Name</label>
+            <label htmlFor="name" style={styles.label}>
+              Name
+            </label>
             <input
               id="name"
               name="name"
@@ -46,12 +101,15 @@ export default function Contact() {
               placeholder="Your full name"
               style={styles.input}
               required
+              disabled={isSending}
             />
           </div>
 
           {/* Email */}
           <div style={styles.row}>
-            <label htmlFor="email" style={styles.label}>Email</label>
+            <label htmlFor="email" style={styles.label}>
+              Email
+            </label>
             <input
               id="email"
               name="email"
@@ -59,35 +117,51 @@ export default function Contact() {
               placeholder="you@company.com"
               style={styles.input}
               required
+              disabled={isSending}
             />
           </div>
 
           {/* Phone (optional) */}
           <div style={styles.row}>
-            <label htmlFor="phone" style={styles.label}>Phone (optional)</label>
+            <label htmlFor="phone" style={styles.label}>
+              Phone (optional)
+            </label>
             <input
               id="phone"
               name="phone"
               type="tel"
               placeholder="(###) ###-####"
               style={styles.input}
+              disabled={isSending}
             />
           </div>
 
           {/* Event date + Type */}
-          <div style={styles.grid2}>
+          <div style={styles.grid2} className="grid2">
             <div style={styles.row}>
-              <label htmlFor="date" style={styles.label}>Event Date</label>
+              <label htmlFor="date" style={styles.label}>
+                Event Date
+              </label>
               <input
                 id="date"
                 name="date"
                 type="date"
                 style={styles.input}
+                disabled={isSending}
               />
             </div>
+
             <div style={styles.row}>
-              <label htmlFor="type" style={styles.label}>Event Type</label>
-              <select id="type" name="type" style={styles.input}>
+              <label htmlFor="type" style={styles.label}>
+                Event Type
+              </label>
+              <select
+                id="type"
+                name="type"
+                style={styles.input}
+                defaultValue=""
+                disabled={isSending}
+              >
                 <option value="">Select an option</option>
                 <option>Wedding</option>
                 <option>Corporate Activation</option>
@@ -100,8 +174,16 @@ export default function Contact() {
 
           {/* Budget */}
           <div style={styles.row}>
-            <label htmlFor="budget" style={styles.label}>Approx. Budget</label>
-            <select id="budget" name="budget" style={styles.input}>
+            <label htmlFor="budget" style={styles.label}>
+              Approx. Budget
+            </label>
+            <select
+              id="budget"
+              name="budget"
+              style={styles.input}
+              defaultValue=""
+              disabled={isSending}
+            >
               <option value="">Select a range</option>
               <option>$500 – $1,500</option>
               <option>$1,500 – $3,000</option>
@@ -112,7 +194,9 @@ export default function Contact() {
 
           {/* Message */}
           <div style={styles.row}>
-            <label htmlFor="message" style={styles.label}>Tell us about your vision</label>
+            <label htmlFor="message" style={styles.label}>
+              Tell us about your vision
+            </label>
             <textarea
               id="message"
               name="message"
@@ -120,11 +204,14 @@ export default function Contact() {
               rows={5}
               style={{ ...styles.input, resize: "vertical" }}
               required
+              disabled={isSending}
             />
           </div>
 
           {/* Submit */}
-          <button type="submit" style={styles.button}>Send</button>
+          <button type="submit" style={styles.button} disabled={isSending}>
+            {isSending ? "Sending..." : "Send"}
+          </button>
 
           {/* Status */}
           {status === "ok" && (
@@ -134,7 +221,7 @@ export default function Contact() {
           )}
           {status === "error" && (
             <p style={{ ...styles.status, color: "#b00020" }}>
-              Please fill out name, email, and message.
+              {errorMsg || "Something went wrong. Please try again."}
             </p>
           )}
         </form>
@@ -151,7 +238,7 @@ const styles = {
     justifyContent: "center",
     paddingTop: 48,
     position: "relative",
-    zIndex: 1, // sits above the fixed background from Header
+    zIndex: 1,
   },
   wrap: {
     width: "100%",
@@ -162,7 +249,8 @@ const styles = {
   title: {
     margin: 0,
     textAlign: "center",
-    fontFamily: "Montserrat, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif",
+    fontFamily:
+      "Montserrat, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif",
     fontWeight: 700,
     fontSize: 34,
     color: "#1b1b1b",
@@ -216,22 +304,10 @@ const styles = {
     borderRadius: 8,
     cursor: "pointer",
     transition: "transform .12s ease",
+    opacity: 1,
   },
   status: {
     marginTop: 10,
     fontSize: 14,
   },
 };
-
-const css = `
-  @media (max-width: 560px) {
-    .page { padding-left: 20px; padding-right: 20px; }
-  }
-  @media (max-width: 390px) {
-    .page { padding-left: 24px; padding-right: 24px; }
-  }
-  @media (max-width: 720px) {
-    /* stack date/type on narrow screens */
-    form .grid2 { grid-template-columns: 1fr !important; }
-  }
-`;
