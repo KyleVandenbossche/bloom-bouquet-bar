@@ -59,15 +59,15 @@ const styles = {
   title: {
     margin: 0,
     fontFamily: "Montserrat, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif",
-    fontWeight: 550,
-    fontSize: "30px",
+    fontWeight: 700,
+    fontSize: "36px",
     letterSpacing: 0.3,
     color: "#1b1b1b",
   },
   tagline: {
     marginTop: 2,
     fontStyle: "italic",
-    fontSize: 8.5,
+    fontSize: 10,
     color: "#333",
   },
   copyWrap: {

@@ -181,9 +181,8 @@ export default function Home() {
 
         <div style={styles.copyWrap}>
           <p style={styles.copy}>
-            We bring an interactive floral experience right to your event. Guests choose their
-            favorite stems and wrap their own take-home bouquet — no floral experience needed,
-            just good vibes and beautiful blooms.
+            We bring an elevated, interactive floral experience right to your event. Guests hand-select the blooms they
+            love and leave with a beautifully curated, take-home bouquet — Effortless, elegant, fun and full of good vibes.
           </p>
 
           <hr style={styles.divider} />

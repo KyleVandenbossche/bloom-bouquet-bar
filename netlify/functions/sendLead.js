@@ -19,8 +19,10 @@ exports.handler = async (event) => {
     });
 
     const mailOptions = {
-      from: `"Bloom Bouquet Bar Lead" <${process.env.ZOHO_USER}>`,
+      from: `"Bloom Bouquet Bar" <${process.env.ZOHO_USER}>`,
+      replyTo: data.email,
       to: process.env.TO_EMAIL,
+      cc: "channydean@gmail.com",
       subject: `🌸 New Lead: ${data.name}`,
       html: `
         <h2>New Sales Lead</h2>
