@@ -175,7 +175,7 @@ export default function Contact() {
           {/* Budget */}
           <div style={styles.row}>
             <label htmlFor="budget" style={styles.label}>
-              Approx. Budget
+              Package Deal
             </label>
             <select
               id="budget"
@@ -184,11 +184,11 @@ export default function Contact() {
               defaultValue=""
               disabled={isSending}
             >
-              <option value="">Select a range</option>
-              <option>$500 – $1,500</option>
-              <option>$1,500 – $3,000</option>
-              <option>$3,000 – $5,000</option>
-              <option>$5,000+</option>
+              <option value="">Select a Package</option>
+              <option>Package 1</option>
+              <option>Package 2</option>
+              <option>Package 3</option>
+              <option>Package 4</option>
             </select>
           </div>
 

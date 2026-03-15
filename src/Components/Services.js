@@ -1,9 +1,9 @@
 import React from "react";
 
 import pkg1 from "../Photos/package-1-1.PNG";
-import pkg2 from "../Photos/package-2.png";
-import pkg3 from "../Photos/package-3.png";
-import pkg4 from "../Photos/package-4.png";
+import pkg2 from "../Photos/package-2-2.PNG";
+import pkg3 from "../Photos/package-3-3.PNG";
+import pkg4 from "../Photos/package-4-4.PNG";
 import pkg5 from "../Photos/package-5.png";
 import pkg6 from "../Photos/package-6.png";
 
