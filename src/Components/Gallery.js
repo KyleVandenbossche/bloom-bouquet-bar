@@ -3,24 +3,24 @@ import React, { useEffect, useRef, useState } from "react";
 
 import bloomOne from "../Photos/bloom-1.PNG";
 import bloomTwo from "../Photos/bloom-2.PNG";
-import bloomThree from "../Photos/bloom-3.PNG";
-import bloomFour from "../Photos/bloom-4.PNG";
+// import bloomThree from "../Photos/bloom-3.PNG";
+// import bloomFour from "../Photos/bloom-4.PNG";
 import bloomFive from "../Photos/bloom-5.PNG";
 import bloomSix from "../Photos/bloom-6.PNG";
-import bloomSeven from "../Photos/bloom-7.PNG";
+// import bloomSeven from "../Photos/bloom-7.PNG";
 import bloomEight from "../Photos/bloom-8.PNG";
-import bloomNine from "../Photos/bloom-9.PNG";
+// import bloomNine from "../Photos/bloom-9.PNG";
 
 const photos = [
   bloomOne,
   bloomTwo,
-  bloomThree,
-  bloomFour,
+  // bloomThree,
+  // bloomFour,
   bloomFive,
   bloomSix,
-  bloomSeven,
+  // bloomSeven,
   bloomEight,
-  bloomNine,
+  // bloomNine,
 ];
 
 const FollowCard = ({ src, onOpen }) => {

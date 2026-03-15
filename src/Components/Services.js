@@ -1,6 +1,6 @@
 import React from "react";
 
-import pkg1 from "../Photos/package-1.png";
+import pkg1 from "../Photos/package-1-1.PNG";
 import pkg2 from "../Photos/package-2.png";
 import pkg3 from "../Photos/package-3.png";
 import pkg4 from "../Photos/package-4.png";
@@ -138,7 +138,7 @@ const css = `
     left: 0;
     right: 0;
     padding: 32px 24px;
-    background: linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 100%);
+    // background: linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 100%);
     border-radius: 0 0 12px 12px;
   }
 
