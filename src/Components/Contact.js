@@ -185,10 +185,12 @@ export default function Contact() {
               disabled={isSending}
             >
               <option value="">Select a Package</option>
-              <option>Package 1</option>
-              <option>Package 2</option>
-              <option>Package 3</option>
-              <option>Package 4</option>
+              <option>Package #1</option>
+              <option>Package #2</option>
+              <option>Package #3</option>
+              <option>Package #4</option>
+              <option>Package #5</option>
+              <option>Package #6</option>
             </select>
           </div>
 
