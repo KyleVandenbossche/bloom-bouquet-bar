@@ -1,8 +1,6 @@
-// src/Components/Contact.js
 import React, { useMemo, useState } from "react";
 
 export default function Contact() {
-  // status: "idle" | "sending" | "ok" | "error"
   const [status, setStatus] = useState("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -12,13 +10,13 @@ export default function Contact() {
     e.preventDefault();
     alert("submit fired");
     console.log("submit fired");
+
     setErrorMsg("");
     setStatus("idle");
 
     const form = e.currentTarget;
     const data = new FormData(form);
 
-    // Required fields
     const name = (data.get("name") || "").toString().trim();
     const email = (data.get("email") || "").toString().trim();
     const message = (data.get("message") || "").toString().trim();
@@ -29,11 +27,11 @@ export default function Contact() {
       return;
     }
 
-    // Convert FormData -> plain object (includes optional fields)
     const payload = Object.fromEntries(data.entries());
 
     try {
       setStatus("sending");
+      console.log("about to fetch", payload);
 
       const res = await fetch("/.netlify/functions/sendLead", {
         method: "POST",
@@ -41,11 +39,15 @@ export default function Contact() {
         body: JSON.stringify(payload),
       });
 
-      // Try to read response body for better errors
+      console.log("fetch response status:", res.status);
+
       let bodyText = "";
       try {
         bodyText = await res.text();
-      } catch (_) {}
+        console.log("fetch response body:", bodyText);
+      } catch (readErr) {
+        console.error("could not read response body:", readErr);
+      }
 
       if (!res.ok) {
         setErrorMsg(
@@ -60,6 +62,7 @@ export default function Contact() {
       setStatus("ok");
       form.reset();
     } catch (err) {
+      console.error("fetch crashed:", err);
       setErrorMsg("Network error. Please try again.");
       setStatus("error");
     }
@@ -70,11 +73,11 @@ export default function Contact() {
       @media (max-width: 560px) {
         .page { padding-left: 20px; padding-right: 20px; }
       }
+
       @media (max-width: 390px) {
         .page { padding-left: 24px; padding-right: 24px; }
       }
 
-      /* stack date/type on narrow screens */
       @media (max-width: 720px) {
         .grid2 { grid-template-columns: 1fr !important; }
       }
@@ -91,7 +94,6 @@ export default function Contact() {
         <p style={styles.tagline}>Tell us about your event—let’s make it bloom.</p>
 
         <form style={styles.form} onSubmit={onSubmit} noValidate>
-          {/* Name */}
           <div style={styles.row}>
             <label htmlFor="name" style={styles.label}>
               Name
@@ -107,7 +109,6 @@ export default function Contact() {
             />
           </div>
 
-          {/* Email */}
           <div style={styles.row}>
             <label htmlFor="email" style={styles.label}>
               Email
@@ -123,7 +124,6 @@ export default function Contact() {
             />
           </div>
 
-          {/* Phone (optional) */}
           <div style={styles.row}>
             <label htmlFor="phone" style={styles.label}>
               Phone (optional)
@@ -138,7 +138,6 @@ export default function Contact() {
             />
           </div>
 
-          {/* Event date + Type */}
           <div style={styles.grid2} className="grid2">
             <div style={styles.row}>
               <label htmlFor="date" style={styles.label}>
@@ -174,7 +173,6 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Budget */}
           <div style={styles.row}>
             <label htmlFor="budget" style={styles.label}>
               Package Deal
@@ -196,7 +194,6 @@ export default function Contact() {
             </select>
           </div>
 
-          {/* Message */}
           <div style={styles.row}>
             <label htmlFor="message" style={styles.label}>
               Tell us about your vision
@@ -212,17 +209,24 @@ export default function Contact() {
             />
           </div>
 
-          {/* Submit */}
-          <button type="submit" style={styles.button} disabled={isSending}>
+          <button
+            type="submit"
+            style={{
+              ...styles.button,
+              opacity: isSending ? 0.7 : 1,
+              cursor: isSending ? "not-allowed" : "pointer",
+            }}
+            disabled={isSending}
+          >
             {isSending ? "Sending..." : "Send"}
           </button>
 
-          {/* Status */}
           {status === "ok" && (
             <p style={{ ...styles.status, color: "#2e7d32" }}>
               Thanks! We’ll get back to you shortly.
             </p>
           )}
+
           {status === "error" && (
             <p style={{ ...styles.status, color: "#b00020" }}>
               {errorMsg || "Something went wrong. Please try again."}
@@ -273,7 +277,9 @@ const styles = {
     border: "1px solid rgba(0,0,0,0.06)",
     padding: 20,
   },
-  row: { marginBottom: 14 },
+  row: {
+    marginBottom: 14,
+  },
   label: {
     display: "block",
     fontSize: 13,
@@ -296,20 +302,22 @@ const styles = {
     gap: 12,
     marginBottom: 14,
   },
-button: {
-  display: "block",        // change from inline-block
-  margin: "4px auto 0",   // top: 4, sides: auto (centers it), bottom: 0
-  padding: "10px 18px",
-  background: "#E9B8C9",
-  color: "#1b1b1b",
-  fontWeight: 700,
-  fontSize: 15,
-  border: "none",
-  borderRadius: 8,
-  cursor: "pointer",
-  transition: "transform .12s ease",
-  opacity: 1,
-},
+  button: {
+    display: "block",
+    margin: "4px auto 0",
+    padding: "10px 18px",
+    background: "#E9B8C9",
+    color: "#1b1b1b",
+    fontWeight: 700,
+    fontSize: 15,
+    border: "none",
+    borderRadius: 8,
+    cursor: "pointer",
+    transition: "transform .12s ease, opacity .2s ease",
+    opacity: 1,
+    position: "relative",
+    zIndex: 5,
+  },
   status: {
     marginTop: 10,
     fontSize: 14,
