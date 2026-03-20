@@ -18,25 +18,25 @@ exports.handler = async (event) => {
       },
     });
 
-    const mailOptions = {
-      from: `"Bloom Bouquet Bar" <${process.env.ZOHO_USER}>`,
-      replyTo: data.email,
-      to: process.env.TO_EMAIL,
-      cc: "channydean@gmail.com",
-      subject: `🌸 New Lead: ${data.name}`,
-      html: `
-        <h2>New Sales Lead</h2>
-        <p><strong>Name:</strong> ${data.name}</p>
-        <p><strong>Email:</strong> ${data.email}</p>
-        <p><strong>Phone:</strong> ${data.phone || "N/A"}</p>
-        <p><strong>Event Date:</strong> ${data.date || "N/A"}</p>
-        <p><strong>Event Type:</strong> ${data.type || "N/A"}</p>
-        <p><strong>Budget:</strong> ${data.budget || "N/A"}</p>
-        <hr />
-        <p><strong>Message:</strong></p>
-        <p>${data.message}</p>
-      `,
-    };
+const mailOptions = {
+  from: process.env.ZOHO_USER,
+  replyTo: process.env.ZOHO_USER,
+  to: process.env.TO_EMAIL,
+  cc: "channydean@gmail.com",
+  subject: `🌸 New Lead: ${data.name} (${data.email})`,
+  html: `
+    <h2>New Sales Lead</h2>
+    <p><strong>Name:</strong> ${data.name}</p>
+    <p><strong>Email:</strong> ${data.email}</p>
+    <p><strong>Phone:</strong> ${data.phone || "N/A"}</p>
+    <p><strong>Event Date:</strong> ${data.date || "N/A"}</p>
+    <p><strong>Event Type:</strong> ${data.type || "N/A"}</p>
+    <p><strong>Budget:</strong> ${data.budget || "N/A"}</p>
+    <hr />
+    <p><strong>Message:</strong></p>
+    <p>${data.message}</p>
+  `,
+};
 
     await transporter.sendMail(mailOptions);
 
