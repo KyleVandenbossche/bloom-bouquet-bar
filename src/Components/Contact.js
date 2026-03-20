@@ -8,7 +8,6 @@ export default function Contact() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    alert("submit fired");
     console.log("submit fired");
 
     setErrorMsg("");

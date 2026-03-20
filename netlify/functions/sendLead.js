@@ -2,11 +2,14 @@ const nodemailer = require("nodemailer");
 
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Method Not Allowed" };
+    return {
+      statusCode: 405,
+      body: "Method Not Allowed",
+    };
   }
 
   try {
-    const data = JSON.parse(event.body);
+    const data = JSON.parse(event.body || "{}");
 
     const transporter = nodemailer.createTransport({
       host: "smtp.zoho.com",
@@ -18,33 +21,35 @@ exports.handler = async (event) => {
       },
     });
 
-const mailOptions = {
-  from: process.env.ZOHO_USER,
-  replyTo: process.env.ZOHO_USER,
-  to: process.env.TO_EMAIL,
-  cc: "channydean@gmail.com",
-  subject: `🌸 New Lead: ${data.name} (${data.email})`,
-  html: `
-    <h2>New Sales Lead</h2>
-    <p><strong>Name:</strong> ${data.name}</p>
-    <p><strong>Email:</strong> ${data.email}</p>
-    <p><strong>Phone:</strong> ${data.phone || "N/A"}</p>
-    <p><strong>Event Date:</strong> ${data.date || "N/A"}</p>
-    <p><strong>Event Type:</strong> ${data.type || "N/A"}</p>
-    <p><strong>Budget:</strong> ${data.budget || "N/A"}</p>
-    <hr />
-    <p><strong>Message:</strong></p>
-    <p>${data.message}</p>
-  `,
-};
+    const mailOptions = {
+      from: process.env.ZOHO_USER,
+      to: process.env.TO_EMAIL,
+      cc: "channydean@gmail.com",
+      subject: `🌸 New Lead: ${data.name || "Unknown"} - ${data.type || "Inquiry"}`,
+      html: `
+        <h2>New Sales Lead</h2>
+        <p><strong>Name:</strong> ${data.name || "N/A"}</p>
+        <p><strong>Email:</strong> ${data.email || "N/A"}</p>
+        <p><strong>Phone:</strong> ${data.phone || "N/A"}</p>
+        <p><strong>Event Date:</strong> ${data.date || "N/A"}</p>
+        <p><strong>Event Type:</strong> ${data.type || "N/A"}</p>
+        <p><strong>Package Deal:</strong> ${data.budget || "N/A"}</p>
+        <hr />
+        <p><strong>Message:</strong></p>
+        <p>${(data.message || "").replace(/\n/g, "<br />")}</p>
+      `,
+    };
 
-    await transporter.sendMail(mailOptions);
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Mail sent info:", info);
 
     return {
       statusCode: 200,
       body: JSON.stringify({ message: "Email sent" }),
     };
   } catch (error) {
+    console.error("sendLead error:", error);
+
     return {
       statusCode: 500,
       body: JSON.stringify({ error: error.message }),
