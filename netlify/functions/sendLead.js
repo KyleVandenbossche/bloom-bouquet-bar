@@ -21,11 +21,17 @@ exports.handler = async (event) => {
       },
     });
 
+    const recipients = [process.env.TO_EMAIL, "channydean@gmail.com"].filter(Boolean);
+
     const mailOptions = {
-      from: process.env.ZOHO_USER,
-      to: process.env.TO_EMAIL,
-      cc: "channydean@gmail.com",
-      subject: `🌸 New Lead: ${data.name || "Unknown"} - ${data.type || "Inquiry"}`,
+sender: "bloom.bouquet.bar@zohomail.com",
+from: "Bloom Bouquet Bar <bloom.bouquet.bar@zohomail.com>",
+      to: recipients,
+subject: `HARDCODE TEST - ${data.name || "Unknown"}`,
+envelope: {
+  from: "bloom.bouquet.bar@zohomail.com",
+  to: recipients,
+},
       html: `
         <h2>New Sales Lead</h2>
         <p><strong>Name:</strong> ${data.name || "N/A"}</p>
@@ -38,10 +44,31 @@ exports.handler = async (event) => {
         <p><strong>Message:</strong></p>
         <p>${(data.message || "").replace(/\n/g, "<br />")}</p>
       `,
+      text: `
+New Sales Lead
+
+Name: ${data.name || "N/A"}
+Email: ${data.email || "N/A"}
+Phone: ${data.phone || "N/A"}
+Event Date: ${data.date || "N/A"}
+Event Type: ${data.type || "N/A"}
+Package Deal: ${data.budget || "N/A"}
+
+Message:
+${data.message || ""}
+      `,
     };
 
+    console.log("MAIL DEBUG", {
+      sender: mailOptions.sender,
+      from: mailOptions.from,
+      to: mailOptions.to,
+      envelope: mailOptions.envelope,
+      subject: mailOptions.subject,
+    });
+
     const info = await transporter.sendMail(mailOptions);
-    console.log("Mail sent info:", info);
+    console.log("MAIL SENT", info);
 
     return {
       statusCode: 200,
@@ -49,7 +76,6 @@ exports.handler = async (event) => {
     };
   } catch (error) {
     console.error("sendLead error:", error);
-
     return {
       statusCode: 500,
       body: JSON.stringify({ error: error.message }),
